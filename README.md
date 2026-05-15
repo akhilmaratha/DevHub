@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/public/logo.png" alt="DevHub Logo" width="120" height="120" />
+  <img src="/public/DevHub_Logo.png" alt="DevHub Logo" width="250" height="250" />
   <h1>DevHub</h1>
   <p><strong>The Developer Social Platform</strong></p>
   <p>Showcase your projects, share your knowledge, and connect with developers worldwide.</p>
@@ -111,6 +111,8 @@ MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/devhub
 # JWT Authentication Secret
 JWT_SECRET=your_super_secret_jwt_key_here
 
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
 # (Optional) GitHub API Token for increased rate limits
 GITHUB_TOKEN=your_github_personal_access_token
 ```
@@ -127,22 +129,6 @@ The application uses MongoDB with Mongoose for data modeling. The core entities 
 - **Blogs**: Stores article content, tags, and a `likes` array referencing User IDs.
 - **Activities**: Tracks events (likes, follows, creates) to power the real-time activity feed.
 
-## 📸 Screenshots
-
-### Landing Page
-*(Add screenshot here)*
-
-### Dashboard Overview
-*(Add screenshot here)*
-
-### Developer Profile
-*(Add screenshot here)*
-
-### Project Showcase
-*(Add screenshot here)*
-
-### Activity Feed
-*(Add screenshot here)*
 
 ## 🌐 Deployment
 

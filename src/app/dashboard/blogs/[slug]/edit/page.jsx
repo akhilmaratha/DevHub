@@ -11,6 +11,8 @@ import AnimateIn from "@/components/shared/AnimateIn";
 import { Save, Plus, X, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+import MarkdownEditor from "@/components/shared/MarkdownEditor";
+
 export default function EditBlogPage({ params }) {
   const { slug } = use(params);
   const router = useRouter();
@@ -129,8 +131,12 @@ export default function EditBlogPage({ params }) {
           )}
         </div>
 
-        <div className="p-6 bg-card border border-border rounded-xl space-y-5">
-          <Textarea label="Content" value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} className="min-h-[300px]" required />
+        <div className="space-y-2">
+          <h2 className="text-[13px] font-medium text-zinc-300 px-1">Content</h2>
+          <MarkdownEditor 
+            value={form.content} 
+            onChange={(val) => setForm({ ...form, content: val })} 
+          />
         </div>
 
         <Button type="submit" disabled={loading}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
@@ -10,12 +10,35 @@ import Badge from "@/components/ui/Badge";
 import AnimateIn from "@/components/shared/AnimateIn";
 import { Save, Plus, X, ArrowLeft } from "lucide-react";
 
+import MarkdownEditor from "@/components/shared/MarkdownEditor";
+
 export default function NewBlogPage() {
   const router = useRouter();
   const [form, setForm] = useState({ title: "", content: "", tags: [], coverImage: "", excerpt: "" });
   const [tagInput, setTagInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Load draft on mount
+  useEffect(() => {
+    const draft = localStorage.getItem("devhub-blog-draft");
+    if (draft) {
+      try {
+        const parsed = JSON.parse(draft);
+        if (parsed) setForm(parsed);
+      } catch (e) { }
+    }
+  }, []);
+
+  // Autosave
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (form.title || form.content) {
+        localStorage.setItem("devhub-blog-draft", JSON.stringify(form));
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [form]);
 
   const addTag = () => { const t = tagInput.trim(); if (t && !form.tags.includes(t)) { setForm({ ...form, tags: [...form.tags, t] }); setTagInput(""); } };
   const removeTag = (t) => setForm({ ...form, tags: form.tags.filter((x) => x !== t) });
@@ -26,29 +49,36 @@ export default function NewBlogPage() {
     setLoading(true);
     try {
       const res = await fetch("/api/blogs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
-      if (res.ok) { const data = await res.json(); router.push(`/blogs/${data.blog.slug}`); }
+      if (res.ok) {
+        localStorage.removeItem("devhub-blog-draft");
+        const data = await res.json();
+        router.push(`/blogs/${data.blog.slug}`);
+      }
       else { const data = await res.json(); setError(data.error || "Failed."); }
     } catch { setError("Something went wrong."); } finally { setLoading(false); }
   };
 
   return (
-    <div className="max-w-5xl space-y-5">
+    <div className="max-w-5xl space-y-5 pb-20">
       <AnimateIn>
         <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-[13px] text-zinc-500 hover:text-zinc-300 transition-colors mb-3"><ArrowLeft className="w-3.5 h-3.5" /> Dashboard</Link>
-        <h1 className="text-lg font-semibold text-zinc-100 tracking-tight mb-0.5">New Post</h1>
+        <div className="flex items-center justify-between mb-0.5">
+          <h1 className="text-lg font-semibold text-zinc-100 tracking-tight">New Post</h1>
+          <span className="text-[11px] text-zinc-500 bg-surface px-2 py-0.5 rounded border border-border">Draft saved</span>
+        </div>
         <p className="text-[13px] text-zinc-500">Share your knowledge.</p>
       </AnimateIn>
 
       {error && <div className="px-3 py-2.5 rounded-md bg-red-500/6 border border-red-500/10 text-[13px] text-red-400">{error}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="border border-border rounded-lg p-4 space-y-4">
+        <div className="border border-border rounded-lg p-4 space-y-4 bg-card">
           <Input label="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="How I built..." required />
           <Textarea label="Excerpt" value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} placeholder="Brief summary..." maxLength={300} className="min-h-[60px]" />
           <Input label="Cover Image URL" value={form.coverImage} onChange={(e) => setForm({ ...form, coverImage: e.target.value })} placeholder="https://..." />
         </div>
 
-        <div className="border border-border rounded-lg p-4 space-y-3">
+        <div className="border border-border rounded-lg p-4 space-y-3 bg-card">
           <p className="text-[13px] font-medium text-zinc-300">Tags</p>
           <div className="flex gap-2">
             <Input value={tagInput} onChange={(e) => setTagInput(e.target.value)} placeholder="e.g. JavaScript" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }} />
@@ -61,8 +91,12 @@ export default function NewBlogPage() {
           )}
         </div>
 
-        <div className="border border-border rounded-lg p-4">
-          <Textarea label="Content" value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} placeholder="Write your post..." className="min-h-[240px]" required />
+        <div className="space-y-2">
+          <p className="text-[13px] font-medium text-zinc-300 px-1">Content</p>
+          <MarkdownEditor
+            value={form.content}
+            onChange={(val) => setForm({ ...form, content: val })}
+          />
         </div>
 
         <Button type="submit" disabled={loading}>

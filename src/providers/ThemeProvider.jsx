@@ -10,7 +10,7 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     const stored = localStorage.getItem("devhub-theme");
-    const preferred = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const preferred = stored || "light";
     setTheme(preferred);
     document.documentElement.setAttribute("data-theme", preferred);
     setMounted(true);

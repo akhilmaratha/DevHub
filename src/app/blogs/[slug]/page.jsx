@@ -12,6 +12,7 @@ import LikeButton from "@/components/shared/LikeButton";
 import BookmarkButton from "@/components/shared/BookmarkButton";
 import { ArrowLeft, Calendar, Pencil, Trash2, Clock } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import MarkdownRenderer from "@/components/shared/MarkdownRenderer";
 
 export default function BlogDetailPage({ params }) {
   const { slug } = use(params);
@@ -81,9 +82,9 @@ export default function BlogDetailPage({ params }) {
           </div>
 
           {/* Content */}
-          <article className="text-[15px] text-zinc-300 leading-[1.8] whitespace-pre-wrap mb-10">
-            {blog.content}
-          </article>
+          <div className="mb-10">
+            <MarkdownRenderer content={blog.content} />
+          </div>
 
           {/* Author & Actions */}
           <div className="flex items-center justify-between py-4 border-t border-border">
