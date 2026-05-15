@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-border: var(--border-color);
+  --color-border-hover: var(--border-hover-color);
+  --color-muted: var(--muted-val);
+  --color-muted-foreground: var(--muted-fg-val);
+  --color-accent: #3b82f6;
+  --color-accent-hover: #2563eb;
+  --color-surface: var(--surface-val);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ===== DARK THEME (default) ===== */
+:root,
+[data-theme="dark"] {
+  --bg: #111113;
+  --fg: #ececec;
+  --card: #161618;
+  --card-hover: #1c1c1f;
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-hover-color: rgba(255, 255, 255, 0.1);
+  --muted-val: #7c7c82;
+  --muted-fg-val: #57575c;
+  --surface-val: #19191b;
+  --skeleton-from: #1c1c1f;
+  --skeleton-via: #242428;
+  --scrollbar-thumb: #222225;
+  color-scheme: dark;
+}
+
+/* ===== LIGHT THEME ===== */
+[data-theme="light"] {
+  --bg: #ffffff;
+  --fg: #111113;
+  --card: #f7f7f8;
+  --card-hover: #eeeeef;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-hover-color: rgba(0, 0, 0, 0.14);
+  --muted-val: #6b6b70;
+  --muted-fg-val: #9c9ca2;
+  --surface-val: #f0f0f2;
+  --skeleton-from: #e8e8ea;
+  --skeleton-via: #dddde0;
+  --scrollbar-thumb: #c8c8cc;
+  color-scheme: light;
+}
+
+/* ===== LIGHT THEME TEXT OVERRIDES ===== */
+[data-theme="light"] {
+  /* zinc-100 → dark */
+  .text-zinc-100 { color: #1a1a1d !important; }
+  /* zinc-200 → slightly lighter dark */
+  .text-zinc-200 { color: #27272a !important; }
+  /* zinc-300 → medium dark */
+  .text-zinc-300 { color: #3f3f46 !important; }
+  /* zinc-400 → muted */
+  .text-zinc-400 { color: #52525b !important; }
+  /* zinc-500 → lighter muted */
+  .text-zinc-500 { color: #71717a !important; }
+  /* zinc-600 → light muted */
+  .text-zinc-600 { color: #a1a1aa !important; }
+
+  /* Background overrides for rgba patterns */
+  .bg-\[rgba\(255\,255\,255\,0\.02\)\] { background-color: rgba(0, 0, 0, 0.015) !important; }
+  .bg-\[rgba\(255\,255\,255\,0\.03\)\] { background-color: rgba(0, 0, 0, 0.025) !important; }
+  .bg-\[rgba\(255\,255\,255\,0\.04\)\] { background-color: rgba(0, 0, 0, 0.03) !important; }
+  .bg-\[rgba\(255\,255\,255\,0\.06\)\] { background-color: rgba(0, 0, 0, 0.04) !important; }
+  .hover\:bg-\[rgba\(255\,255\,255\,0\.02\)\]:hover { background-color: rgba(0, 0, 0, 0.02) !important; }
+  .hover\:bg-\[rgba\(255\,255\,255\,0\.03\)\]:hover { background-color: rgba(0, 0, 0, 0.03) !important; }
+  .hover\:bg-\[rgba\(255\,255\,255\,0\.04\)\]:hover { background-color: rgba(0, 0, 0, 0.04) !important; }
+
+  /* Border overrides */
+  .border-\[rgba\(255\,255\,255\,0\.04\)\] { border-color: rgba(0, 0, 0, 0.06) !important; }
+  .border-\[rgba\(255\,255\,255\,0\.06\)\] { border-color: rgba(0, 0, 0, 0.08) !important; }
+  .border-\[rgba\(255\,255\,255\,0\.08\)\] { border-color: rgba(0, 0, 0, 0.1) !important; }
+  .border-\[rgba\(255\,255\,255\,0\.1\)\] { border-color: rgba(0, 0, 0, 0.12) !important; }
+  .border-\[rgba\(255\,255\,255\,0\.12\)\] { border-color: rgba(0, 0, 0, 0.14) !important; }
+  .hover\:border-\[rgba\(255\,255\,255\,0\.12\)\]:hover { border-color: rgba(0, 0, 0, 0.14) !important; }
+  .hover\:border-\[rgba\(255\,255\,255\,0\.15\)\]:hover { border-color: rgba(0, 0, 0, 0.18) !important; }
+
+  /* Selection */
+  ::selection {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #111113;
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+*::-webkit-scrollbar { width: 6px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 3px; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+::selection {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #ececec;
+}
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--skeleton-from) 25%, var(--skeleton-via) 50%, var(--skeleton-from) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Focus ring */
+.focus-ring { outline: none; }
+.focus-ring:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
